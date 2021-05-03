@@ -1,93 +1,50 @@
 ﻿using System;
-using System.IO;
 
 namespace CalculatorApp
 {
-    class Program: Calculators
+    class Program
     {
-        static string appTitle = "Conosle Calculator in C#";
-        static string typeMessage = "Type a number, and press Enter";
-        static string outputMessage = "Your result:";
-
-        static double readInput(int count)
-        {
-            double returnValue;
-
-            try
-            {
-                Console.WriteLine($"{count} {typeMessage}:");
-
-                returnValue = Convert.ToDouble(Console.ReadLine());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-
-                returnValue = -999999999;
-            }
-
-            return returnValue;
-        }
-
-        static void opertaion(double num1, double num2, string op) {
-            Writer writer = new Writer();
-
-            switch (op)
-            {
-                case "a":
-                    writer.Log($"{outputMessage} {num1} + {num2} = {adition(num1, num2)}.");
-                    break;
-                case "s":
-                    writer.Log($"{outputMessage} {num1} - {num2} = {subtraction(num1, num2)}.");
-                    break;
-                case "m":
-                    writer.Log($"{outputMessage} {num1} * {num2} = {multiply(num1, num2)}.");
-                    break;
-                case "d":
-                    if (num2 < 1)
-                    {
-                        num2 = readInput(2);
-                        writer.BlankLine();
-                    }
-                    writer.Log($"{outputMessage} {num1} / {num2} = {divide(num1, num2)}.");
-                    break;
-                default:
-                    writer.Log("Invalid Operation.");
-                    opertaion(num1, num2, op);
-                    break;
-            }
-
-            writer.BlankLine();
-            writer.HorizontalLine();
-            writer.Log("Press any key to close.");
-            Console.ReadLine();
-        }
+        static string APP_TITLE = "Console Calculator in C#";
+        static string OPERATION_MESSAGE = "What operation would you like to issue?";
+        static string ENTER_NUMBER_MESSAGE(int count) => $"Type number {count}, and press Enter";
+        static string RESULT_MESSAGE = "Result:";
+        static string ERROR_MESSAGE = "Error calculating result.";
+        static string END_MESSAGE = "Press any key to close.";
 
         static void Main(string[] args)
         {
-            Writer writer = new Writer();
+            Calculator calculator = new Calculator();
+            Console.WriteLine(APP_TITLE);
 
-            writer.Log(appTitle);
-            writer.HorizontalLine();
-            writer.BlankLine();
+            char operation;
+            double num1, num2;
 
-            double num1 = readInput(1);
-            writer.BlankLine();
+            do {
+                operation = calculator.ReadOperation(OPERATION_MESSAGE);
+            } while (calculator.IsOperationValid(operation) == false);
 
-            double num2 = readInput(2);
-            writer.BlankLine();
+            do {
+                num1 = calculator.ReadNumber(ENTER_NUMBER_MESSAGE(1));
+            } while (num1 == Double.PositiveInfinity);
 
-            writer.HorizontalLine();
-            writer.BlankLine();
+            do {
+                num2 = calculator.ReadNumber(ENTER_NUMBER_MESSAGE(2));
+            } while (num2 == Double.PositiveInfinity);
 
-            writer.Log("Whats operation would you like to issue");
-            writer.Log("\ta - Add");
-            writer.Log("\ts - Subtract");
-            writer.Log("\tm - Multiply");
-            writer.Log("\td - Divide");
-            writer.HorizontalLine();
+            string operationIcon = calculator.GetOperationIcon(operation);
+            double result = calculator.Calculate(operation, num1, num2);
 
-            opertaion(num1, num2, Console.ReadLine());
+            if (result != Double.PositiveInfinity)
+            {
+                Console.WriteLine($"\n{RESULT_MESSAGE} {num1} {operationIcon} {num2} = {result}.");
+            }
+            else
+            {
+                Console.WriteLine($"\n{ERROR_MESSAGE}");
+            }
+
+            Console.Write($"\n{END_MESSAGE}");
+            _ = Console.ReadKey();
         }
     }
 }

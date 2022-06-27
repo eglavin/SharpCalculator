@@ -2,22 +2,22 @@
 
 class Calculator
 {
-   public string GetOperationIcon(char operation)
+    public string GetOperationIcon(string operation)
     {
-        switch (operation)
+        switch (operation.ToLower())
         {
-            case 'a':
+            case "a":
                 return "+";
-            case 's':
+            case "s":
                 return "-";
-            case 'm':
+            case "m":
                 return "*";
-            case 'd':
+            case "d":
                 return "/";
         }
         return "";
     }
-    public bool IsOperationValid(char operation)
+    public bool IsOperationValid(string operation)
     {
         if (GetOperationIcon(operation) != "")
         {
@@ -27,29 +27,35 @@ class Calculator
     }
 
     string HORIZONTAL_LINE = "=============================";
-    public char ReadOperation(string message)
+    public string ReadOperation(string message)
     {
         Console.WriteLine(HORIZONTAL_LINE);
+        Console.WriteLine("List of operations:");
+        Console.WriteLine("");
+        Console.WriteLine("\tKey | Label");
+        Console.WriteLine("\t-----------");
         Console.WriteLine("\ta - Add");
         Console.WriteLine("\ts - Subtract");
         Console.WriteLine("\tm - Multiply");
         Console.WriteLine("\td - Divide");
+        Console.WriteLine("\tq - Quit Now!");
+        Console.WriteLine("");
         Console.WriteLine(HORIZONTAL_LINE);
         Console.WriteLine("");
 
-        char operation;
+        string operation;
 
         try
         {
             Console.Write($"{message}: ");
 
-            operation = Console.ReadKey().KeyChar;
+            operation = Console.ReadKey().KeyChar + "";
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
 
-            operation = '_';
+            operation = "_";
         }
 
         Console.WriteLine("\n");
@@ -63,7 +69,7 @@ class Calculator
 
         try
         {
-            Console.Write($"{message}: ");
+            Console.Write($"\n{message}: ");
 
             returnValue = Convert.ToDouble(Console.ReadLine());
         }
@@ -75,6 +81,19 @@ class Calculator
         }
 
         return returnValue;
+    }
+
+    public bool UsePreviousValue()
+    {
+        Console.Write("Press y to use previous value. ");
+
+        char value = Console.ReadKey().KeyChar;
+        if (value == 'y')
+        {
+            return true;
+        }
+
+        return false;
     }
 
     double Add(double num1, double num2)
@@ -93,17 +112,17 @@ class Calculator
     {
         return num1 / num2;
     }
-    public double Calculate(char operation, double num1, double num2)
+    public double Calculate(string operation, double num1, double num2)
     {
-        switch (operation)
+        switch (operation.ToLower())
         {
-            case 'a':
+            case "a":
                 return Add(num1, num2);
-            case 's':
+            case "s":
                 return Subtract(num1, num2);
-            case 'm':
+            case "m":
                 return Multiply(num1, num2);
-            case 'd':
+            case "d":
                 return Divide(num1, num2);
         }
         return Double.PositiveInfinity;

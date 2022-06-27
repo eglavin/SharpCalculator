@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>EGlavin</Authors>
     <PackageProjectUrl>https://eglavin.com/</PackageProjectUrl>
   </PropertyGroup>
